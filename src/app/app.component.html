@@ -1,3 +1,62 @@
-<h1>
-  {{title}}
-</h1>
+
+
+<div class="container">
+  <app-user-editor></app-user-editor>
+
+  <h1>{{title}}</h1>
+
+  <!-- View Mode -->
+  <section *ngIf="!isEditMode">
+
+    <ul>
+      <li *ngFor="let item of users; let i = index" (click)="selectedUser = item">
+        {{i}} : {{item.name}} <span>{{item.age | myPipe}}</span> <button (click)="deleteUser(i)">x</button>
+        <!--<div class="col-md-2">Name : {{item.name}}</div>
+        <div class="col-md-2">Age : {{item.age}}</div>
+        <div class="col-md-2">Password : {{item.password}}</div>
+        <div class="col-md-2">Height : {{item.height}}</div>
+        <div class="col-md-2" >Weight : {{item.weight}}</div>-->
+        <!--<div class="col-md-2" (click)="">Delete</div>-->
+      </li>
+    </ul>
+
+    <button (click)="deleteUser(0)">Rmeove index 0 member</button>
+    <button (click)="addUser()">Add User</button>
+
+    <div>
+      Sum Age : {{ users | sumPipe | myPipe }}
+    </div>
+
+    <pre>{{ users | filterPipe | json }}</pre>
+    <pre>{{ users | json }}</pre>
+
+    <h1>Detail</h1>
+    
+    <div>
+      <b>Name:</b>{{selectedUser.name}}
+      <b>Age:</b>{{selectedUser.age}}
+      <b>Weight:</b>{{selectedUser.weight}}
+      <b>Height:</b>{{selectedUser.height}}
+    </div>
+    <!-- add edit button -->
+    <button class="btn btn-primary" (click)="isEditMode=true">Edit</button>
+  </section>
+  <!-- Edit Mode -->
+  <section *ngIf="isEditMode">
+    <pre>{{selectedUser | json}}</pre>
+    <h2>Editor</h2>
+    <div>
+      <input type="text" [(ngModel)]="selectedUser.name" /><br/>
+      <input type="number" [(ngModel)]="selectedUser.age" /><br/>
+      <input type="number" [(ngModel)]="selectedUser.weight" /><br/>
+      <input type="number" [(ngModel)]="selectedUser.height" /><br/>
+      <div>
+        <b>BMI:</b>{{selectedUser.getBMI()}}
+        <span *ngIf="selectedUser.isHealthy()">Yay!</span>
+      </div>
+      <button (click)="isEditMode=false">View</button>
+      <button (click)="onCheckAge()">Check Age</button>
+      <button (click)="onCheckBMI()">Check BMI</button>
+    </div>
+  </section>
+</div>
